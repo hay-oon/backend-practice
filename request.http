@@ -1,0 +1,50 @@
+### 블로그 포스트 생성
+POST http://localhost:3000/api/blogs
+Content-Type: application/json
+
+{
+  "title": "여섯 번째 포스트",
+  "content": "안녕하세요6",
+  "author": "작성자6"
+}
+
+### 블로그 목록 조회 (최근 5개)
+GET http://localhost:3000/api/blogs?limit=5
+
+### 특정 블로그 조회
+GET http://localhost:3000/api/blogs/6786103a21c2cfd629c93832
+
+### 블로그 수정
+PATCH http://localhost:3000/api/blogs/6786103a21c2cfd629c93832
+Content-Type: application/json
+
+{
+  "title": "네 번째 포스트-수정해봄",
+  "content": "수정은 영어로 크리스탈"
+}
+
+### 블로그 삭제
+DELETE http://localhost:3000/api/blogs/678613e121c2cfd629c93839
+
+### 댓글 작성
+POST http://localhost:3000/api/blogs/678613e121c2cfd629c93839/comments
+Content-Type: application/json
+
+{
+  "content": "반려동물과 여행을 떠나보실래요?",
+  "author": "이동혁"
+}
+
+### 댓글 목록 조회
+GET http://localhost:3000/api/blogs/678613e121c2cfd629c93839/comments
+
+### 댓글 수정
+PATCH http://localhost:3000/api/blogs/678613e121c2cfd629c93839/comments/67861cf84476d48c52d4082d
+Content-Type: application/json
+
+{
+  "content": "수정된 댓글 내용"
+}
+
+### 댓글 삭제
+DELETE http://localhost:3000/api/blogs/blogId/comments/commentId
