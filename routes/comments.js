@@ -1,12 +1,13 @@
 import express from "express";
 import Comment from "../models/Comment.js";
 
-const router = express.Router({ mergeParams: true }); // 미들웨어 연결
+const router = express.Router({ mergeParams: true });
 
 // POST /api/blogs/:id/comments
 router.post("/", async (req, res) => {
   try {
     const { content, author } = req.body;
+    const blogId = req.params.id;
 
     if (!content || !author) {
       return res.status(400).send({ message: "please fill all fields" });
@@ -15,7 +16,7 @@ router.post("/", async (req, res) => {
     const comment = new Comment({
       content,
       author,
-      blogId: req.params.id,
+      blogId,
     });
     await comment.save();
     res.status(201).send(comment);
@@ -36,12 +37,15 @@ router.get("/", async (req, res) => {
   }
 });
 
-// PATCH /api/blogs/:blogId/comments/:commentId
+// PATCH /api/blogs/:id/comments/:commentId
 router.patch("/:commentId", async (req, res) => {
   try {
     const { content } = req.body;
-    const comment = await Comment.findByIdAndUpdate(
-      req.params.commentId,
+    const comment = await Comment.findOneAndUpdate(
+      {
+        _id: req.params.commentId,
+        blogId: req.params.id,
+      },
       { content },
       { new: true }
     );
@@ -56,10 +60,14 @@ router.patch("/:commentId", async (req, res) => {
   }
 });
 
-// DELETE /api/blogs/:blogId/comments/:commentId
+// DELETE /api/blogs/:id/comments/:commentId
 router.delete("/:commentId", async (req, res) => {
   try {
-    const comment = await Comment.findByIdAndDelete(req.params.commentId);
+    const comment = await Comment.findOneAndDelete({
+      _id: req.params.commentId,
+      blogId: req.params.id,
+    });
+
     if (!comment) {
       return res.status(404).send({ message: "can't find comment" });
     }

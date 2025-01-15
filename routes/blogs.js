@@ -1,12 +1,8 @@
 import express from "express";
 import Blog from "../models/Blog.js";
 import Comment from "../models/Comment.js";
-import commentRouter from "./comments.js";
 
 const router = express.Router();
-
-// 댓글 라우터 연결(미들웨어,중첩라우터 연결)
-router.use("/:id/comments", commentRouter);
 
 // POST /api/blogs
 router.post("/", async (req, res) => {
