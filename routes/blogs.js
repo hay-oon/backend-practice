@@ -1,21 +1,25 @@
 import express from "express";
 import Blog from "../models/Blog.js";
 import Comment from "../models/Comment.js";
+import commentRouter from "./comments.js";
 
 const router = express.Router();
+
+// 댓글 라우터 연결(미들웨어,중첩라우터 연결)
+router.use("/:id/comments", commentRouter);
 
 // POST /api/blogs
 router.post("/", async (req, res) => {
   try {
-    const { title, content, author } = req.body;
+    const { title, content, author } = req.body; // 요청 본문에서 데이터 추출
 
     if (!title || !content || !author) {
       return res.status(400).send({ message: "please fill all fields" });
     }
 
-    const blog = new Blog({ title, content, author });
-    await blog.save();
-    res.status(201).send(blog);
+    const blog = new Blog({ title, content, author }); // 새로운 블로그 포스트 생성
+    await blog.save(); // 데이터베이스에 저장
+    res.status(201).send(blog); // 생성된 블로그 포스트 응답
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
@@ -81,75 +85,6 @@ router.delete("/:id", async (req, res) => {
     await Comment.deleteMany({ blogId: req.params.id });
 
     res.send({ message: "blog deleted" });
-  } catch (error) {
-    res.status(500).send({ message: error.message });
-  }
-});
-
-////////////////////////////////////////////////////////////
-// 댓글 관련 API
-////////////////////////////////////////////////////////////
-
-router.post("/:id/comments", async (req, res) => {
-  try {
-    const { content, author } = req.body;
-
-    if (!content || !author) {
-      return res.status(400).send({ message: "please fill all fields" });
-    }
-
-    const comment = new Comment({
-      content,
-      author,
-      blogId: req.params.id,
-    });
-    await comment.save();
-    res.status(201).send(comment);
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-});
-
-// 댓글 조회
-router.get("/:id/comments", async (req, res) => {
-  try {
-    const comments = await Comment.find({ blogId: req.params.id }).sort({
-      createdAt: -1,
-    });
-    res.send(comments);
-  } catch (error) {
-    res.status(500).send({ message: error.message });
-  }
-});
-
-// 댓글 수정
-router.patch("/:blogId/comments/:commentId", async (req, res) => {
-  try {
-    const { content } = req.body;
-    const comment = await Comment.findByIdAndUpdate(
-      req.params.commentId,
-      { content },
-      { new: true }
-    );
-
-    if (!comment) {
-      return res.status(404).send({ message: "can't find comment" });
-    }
-
-    res.send(comment);
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-});
-
-// 댓글 삭제
-router.delete("/:blogId/comments/:commentId", async (req, res) => {
-  try {
-    const comment = await Comment.findByIdAndDelete(req.params.commentId);
-    if (!comment) {
-      return res.status(404).send({ message: "can't find comment" });
-    }
-    res.send({ message: "comment deleted" });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }

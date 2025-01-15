@@ -2,8 +2,6 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import blogRoutes from "./routes/blogs.js";
-import Blog from "./models/Blog.js";
-import Comment from "./models/Comment.js";
 
 dotenv.config();
 
@@ -21,7 +19,7 @@ mongoose
   .then(() => console.log("DB 연결 성공"))
   .catch((err) => console.error("DB 연결 실패:", err));
 
-// /api/blogs로 시작하는 모든 요청을 blogRoutes로 처리
+// 회사 정문 역할, 진입 후 router를 통해 각 부서로 이동
 app.use("/api/blogs", blogRoutes);
 
 // 서버 시작

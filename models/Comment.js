@@ -12,8 +12,18 @@ const CommentSchema = new mongoose.Schema(
       required: true,
     },
     blogId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+    },
+    parentCommentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+      default: null,
+    },
+    depth: {
+      type: Number,
+      default: 1,
+      max: 2,
     },
   },
   { timestamps: true }

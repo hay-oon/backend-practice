@@ -31,15 +31,15 @@ POST http://localhost:3000/api/blogs/678613e121c2cfd629c93839/comments
 Content-Type: application/json
 
 {
-  "content": "반려동물과 여행을 떠나보실래요?",
-  "author": "이동혁"
+  "content": "반려동물과 여행을 떠나보실래요?1",
+  "author": "이동혁1"
 }
 
 ### 댓글 목록 조회
 GET http://localhost:3000/api/blogs/678613e121c2cfd629c93839/comments
 
 ### 댓글 수정
-PATCH http://localhost:3000/api/blogs/678613e121c2cfd629c93839/comments/67861cf84476d48c52d4082d
+PATCH http://localhost:3000/api/blogs/678613e121c2cfd629c93839/comments/678625234476d48c52d4083a
 Content-Type: application/json
 
 {
@@ -47,4 +47,4 @@ Content-Type: application/json
 }
 
 ### 댓글 삭제
-DELETE http://localhost:3000/api/blogs/blogId/comments/commentId
+DELETE http://localhost:3000/api/blogs/678613e121c2cfd629c93839/comments/6786252a4476d48c52d4083c
